@@ -9,45 +9,54 @@ namespace EuronewsTests
     [TestClass]
     public class TestHomePage
     {
-        [TestMethod]
-        [DataRow("My Europe", "европ", "europe")]
-        [DataRow("Мир", "международ", "intern")]
-        [DataRow("Бизнес", "эконом", "business")]
-        [DataRow("Спорт", "спорт", "sport")]
-        [DataRow("Green", "путешествия", "green")]
-        [DataRow("Next", "next", "next")]
-        [DataRow("Путешествия", "путешествия", "travel")]
-        [DataRow("Культура", "culture", "culture")]
-        [DataRow("Видео", "видео", "video")]
+        private static IWebDriver _driver;
+        private static WebDriverWait _agreeWait;
 
-        public void TestMethod1()
+
+        [ClassInitialize]
+        public static void Initialize(TestContext context)
         {
-            IWebDriver driver = new ChromeDriver();
-            WebDriverWait agreeWait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            _driver = new ChromeDriver();
+            HomePage homePage = new HomePage(_driver);// можно ссылку добавить 
+            _agreeWait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
 
-            HomePage homePage = new HomePage(driver);
-            var key = new List<Keywords> { new Keywords("My Europe", "европ", "europe"),
-                                           new Keywords("Мир", "международ", "intern"),
-                                           new Keywords("Бизнес", "эконом", "business"),
-                                           new Keywords("Спорт", "спорт", "sport"),
-                                           new Keywords("Green", "путешествия", "green"),
-                                           new Keywords("Next", "next", "next"),
-                                           new Keywords("Путешествия", "путешествия", "travel"),
-                                           new Keywords("Культура", "culture", "culture"),
-                                           new Keywords("Видео", "видео", "video")
-            };
-            List<string> res = new List<string>();
-
-            IWebElement agree = driver.FindElement(By.Id("didomi-notice-agree-button"));
+            IWebElement agree = _driver.FindElement(By.Id("didomi-notice-agree-button"));
             agree.Click();
-            agreeWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//h1")));
+            _agreeWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//h1")));
 
-            foreach (var item in key)
-            {
-                Assert.IsTrue(homePage.CheckPage(item));
-            }
+        }
 
-            driver.Close();
+        [TestMethod]
+        [DynamicData(nameof(MyDataSource), DynamicDataSourceType.Method)]
+       
+        public void TestMethod1(Keywords key)
+        {
+            HomePage homePage = new HomePage(_driver);
+                       
+            Assert.IsTrue(homePage.CheckPage(key));
+        }
+        public static IEnumerable<object[]> MyDataSource()
+        {
+            return new List<object[]>
+        {
+            new object[] { new Keywords("My Europe", "европ", "europe") },
+            new object[] { new Keywords("Мир", "международ", "intern") },
+            new object[] { new Keywords("Бизнес", "эконом", "business") },
+            new object[] { new Keywords("Спорт", "спорт", "sport") },
+            new object[] { new Keywords("Green", "путешествия", "green") },
+            new object[] { new Keywords("Next", "next", "next") },
+            new object[] { new Keywords("Путешествия", "путешествия", "travel") },
+            new object[] { new Keywords("Культура", "culture", "culture") },
+            new object[] { new Keywords("Видео", "видео", "video") },
+
+        };
+        }
+
+        [ClassCleanup]
+        public static void Cleanup()
+        {
+            // Закрытие и освобождение ресурсов веб-драйвера здесь
+            _driver.Quit();
         }
     }
 }
