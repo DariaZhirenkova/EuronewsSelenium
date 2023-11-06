@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using SeleniumExtras.WaitHelpers;
 using OpenQA.Selenium.Support.UI;
+using System.Linq;
 
 namespace EuronewsTests
 {
@@ -29,26 +30,67 @@ namespace EuronewsTests
         [TestMethod]
         [DynamicData(nameof(MyDataSource), DynamicDataSourceType.Method)]
        
-        public void TestMethod1(Keywords key)
+        public void HomePageTest(Keywords key)
         {
             HomePage homePage = new HomePage(_driver);
                        
             Assert.IsTrue(homePage.CheckPage(key));
         }
+
+        [TestMethod]
+
+        public void SearchPageTestPossitive()
+        {
+            EuronewsSearchPage searchPage = new EuronewsSearchPage(_driver);
+            var results =  searchPage.GetStartSearch("football");
+
+            var filteredResults = results.Where(x => x.Contains("football")|| x.Contains("футбол")).ToList();
+
+            Assert.IsTrue(filteredResults.Count >= results.Count/2);
+        }
+
+      /*  [TestMethod]
+
+        public void SearchPageTestNegativeText()
+        {
+            const string SEARCH = "vdjvbdhvbfh";
+            EuronewsSearchPage searchPage = new EuronewsSearchPage(_driver);
+            var results = searchPage.GetStartSearch(SEARCH);
+                    
+
+            var searchResults = _driver.FindElement(By.XPath("//p[contains(@class,'c-block-listing__results')]"));
+
+            //Assert.IsTrue(results[0].Contains("Показано 0"));
+
+            //Assert.IsTrue(searchResults.Text == $"Показано 0 Результаты для {SEARCH}");
+
+        }*/
+
+        [TestMethod]
+        public void SearchPageTestNegativeCount()
+        {
+            EuronewsSearchPage searchPage = new EuronewsSearchPage(_driver);
+            var results = searchPage.GetStartSearch("vdjvbdhvbfh");
+
+            Assert.IsTrue(results.Count == 0);
+
+        }
+
+
         public static IEnumerable<object[]> MyDataSource()
         {
             return new List<object[]>
         {
             new object[] { new Keywords("My Europe", "европ", "europe") },
             new object[] { new Keywords("Мир", "международ", "intern") },
-            new object[] { new Keywords("Бизнес", "эконом", "business") },
+            new object[] { new Keywords("Business", "business", "business") },
             new object[] { new Keywords("Спорт", "спорт", "sport") },
             new object[] { new Keywords("Green", "путешествия", "green") },
             new object[] { new Keywords("Next", "next", "next") },
             new object[] { new Keywords("Путешествия", "путешествия", "travel") },
             new object[] { new Keywords("Культура", "culture", "culture") },
             new object[] { new Keywords("Видео", "видео", "video") },
-
+         
         };
         }
 
