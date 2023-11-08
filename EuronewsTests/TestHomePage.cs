@@ -18,7 +18,7 @@ namespace EuronewsTests
         public static void Initialize(TestContext context)
         {
             _driver = new ChromeDriver();
-            HomePage homePage = new HomePage(_driver);// можно ссылку добавить 
+            HomePage homePage = new HomePage(_driver);
             _agreeWait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
 
             IWebElement agree = _driver.FindElement(By.Id("didomi-notice-agree-button"));
@@ -44,7 +44,7 @@ namespace EuronewsTests
             EuronewsSearchPage searchPage = new EuronewsSearchPage(_driver);
             var results =  searchPage.GetStartSearch("football");
 
-            var filteredResults = results.Where(x => x.Contains("football")|| x.Contains("футбол")).ToList();
+            var filteredResults = results.Where(x => x.Contains("football") || x.Contains("футбол")).ToList();
 
             Assert.IsTrue(filteredResults.Count >= results.Count/2);
         }

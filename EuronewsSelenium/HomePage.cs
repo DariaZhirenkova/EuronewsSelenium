@@ -7,28 +7,21 @@ using SeleniumExtras.WaitHelpers;
 
 namespace EuronewsSelenium
 {
-    public class HomePage
+    public class HomePage:EuronewsBasePage
     {
-        IWebDriver _webDriver;
         const string HOME_PAGE_URL = "https://ru.euronews.com";
-        WebDriverWait _wait;
-
-        public HomePage(IWebDriver _wdriver)
+        const string NAV_ELEMENTS_XPATH = "//div[contains(@class, 'list-item u-show-for-xlarge')]";
+        
+        public HomePage(IWebDriver _wdriver) : base(_wdriver, "https://ru.euronews.com")
         {
-            _webDriver = _wdriver;
-            _webDriver.Url = HOME_PAGE_URL;
-            _webDriver.Manage().Window.Maximize();
-            _wait = new WebDriverWait(_wdriver,TimeSpan.FromSeconds(5));
         }
 
         public bool CheckPage(Keywords item)
         {
-            var menuItem = _wait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(By.XPath("//div[contains(@class, 'list-item u-show-for-xlarge')]")))
-                .Where(x => x.Enabled &&  x.Displayed && x.Text == item._xPath ).First();
+            ClickMenuPoint(item);
+            return IsTitleContains(item) && IsURLTrue(item);
 
-            menuItem.Click();
-
-            _wait.Until(ExpectedConditions.UrlContains(item._urlName));
+          /*  _wait.Until(ExpectedConditions.UrlContains(item._urlName));
 
             string title = _webDriver.Title;
 
@@ -37,6 +30,7 @@ namespace EuronewsSelenium
             _webDriver.Navigate().Back();
 
             return title.ToLower().Contains(item._titleName) && url.Contains(item._urlName);
+          */
 
         }
     }

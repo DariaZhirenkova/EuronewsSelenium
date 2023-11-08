@@ -5,20 +5,14 @@ using SeleniumExtras.WaitHelpers;
 
 namespace EuronewsSelenium
 {
-    public class EuronewsSearchPage
+    public class EuronewsSearchPage : EuronewsBasePage
     {
         IWebDriver _webDriver;
-        //const string SEARCH_PAGE_URL = $"https://ru.euronews.com/search?query=";
-        const string XPATH_BOX = "//*[@id='listing-search-autocomplete']/div[1]/div/input";
-        //const string SEARCH_BUTTON = "//*[@id='listing-search-autocomplete']/button";
         const string SEARCH_RESULT_TEXT_XPATH = "//div[contains(@class,'m-object__body')]";
         const string SEARCH_INPUT_HOMEPAGE = "//*[@id='search-autocomplete']/div[1]/div/input";
 
-        public EuronewsSearchPage(IWebDriver _wDriver)
+        public EuronewsSearchPage(IWebDriver _wDriver):base(_wDriver)
         {
-            _webDriver = _wDriver;
-           // _webDriver.Url = SEARCH_PAGE_URL;
-            _webDriver.Manage().Window.Maximize();
         }
 
 
@@ -31,27 +25,14 @@ namespace EuronewsSelenium
 
         }
 
-        public List<string> GetStartSearch(string infoToSaerch)
+        public List<string> GetStartSearch(string infoToSearch)
         {
-            /* IWebElement searchBox = _webDriver.FindElement(By.XPath(XPATH_BOX));
-             searchBox.SendKeys(infoToSaerch);
-             //searchBox.Submit();
-             searchBox.SendKeys(Keys.Enter);//рботает только enter
-            */
-            IWebElement searchInput = _webDriver.FindElement(By.XPath(SEARCH_INPUT_HOMEPAGE));
-            searchInput.Click();
-            searchInput.SendKeys(infoToSaerch);
-            searchInput.SendKeys(Keys.Enter);
+            FindInputEnter(SEARCH_INPUT_HOMEPAGE, infoToSearch);
 
             Thread.Sleep(1000);
-            var searchResults = _webDriver.FindElements(By.XPath(SEARCH_RESULT_TEXT_XPATH));
 
-            return searchResults.Select(x => x.Text).ToList();
+           return FindReturnList(SEARCH_RESULT_TEXT_XPATH);
           
-
-            /*var searchButton = _webDriver.FindElement(By.XPath(SEARCH_BUTTON));
-            searchButton.Click(); не работате нажатие кнопки поиска
-            */
         }
     }
 }
