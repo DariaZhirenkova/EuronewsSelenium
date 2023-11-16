@@ -14,8 +14,8 @@ namespace EuronewsTests
         private static WebDriverWait _agreeWait;
 
 
-        [ClassInitialize]
-        public static void Initialize(TestContext context)
+        [TestInitialize]//ClassInitialize , AssemblyInitialize???
+        public void Initialize(/*TestContext context*/)
         {
             _driver = new ChromeDriver();
             HomePage homePage = new HomePage(_driver);
@@ -26,7 +26,21 @@ namespace EuronewsTests
             _agreeWait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//h1")));
 
         }
-
+        public static IEnumerable<object[]> MyDataSource()
+        {
+            return new List<object[]>
+        {
+            new object[] { new Keywords("My Europe", "европ", "europe") },
+            new object[] { new Keywords("Мир", "международ", "intern") },
+            new object[] { new Keywords("Business", "business", "business") },
+            new object[] { new Keywords("Спорт", "спорт", "sport") },
+            new object[] { new Keywords("Green", "путешествия", "green") },
+            new object[] { new Keywords("Next", "next", "next") },
+            new object[] { new Keywords("Путешествия", "путешествия", "travel") },
+            new object[] { new Keywords("Культура", "culture", "culture") },
+            new object[] { new Keywords("Видео", "видео", "video") }
+        };
+        }
         [TestMethod]
         [DynamicData(nameof(MyDataSource), DynamicDataSourceType.Method)]
        
@@ -77,28 +91,10 @@ namespace EuronewsTests
         }
 
 
-        public static IEnumerable<object[]> MyDataSource()
+        [TestCleanup]
+        public void Cleanup()
         {
-            return new List<object[]>
-        {
-            new object[] { new Keywords("My Europe", "европ", "europe") },
-            new object[] { new Keywords("Мир", "международ", "intern") },
-            new object[] { new Keywords("Business", "business", "business") },
-            new object[] { new Keywords("Спорт", "спорт", "sport") },
-            new object[] { new Keywords("Green", "путешествия", "green") },
-            new object[] { new Keywords("Next", "next", "next") },
-            new object[] { new Keywords("Путешествия", "путешествия", "travel") },
-            new object[] { new Keywords("Культура", "culture", "culture") },
-            new object[] { new Keywords("Видео", "видео", "video") },
-         
-        };
-        }
-
-        [ClassCleanup]
-        public static void Cleanup()
-        {
-            // Закрытие и освобождение ресурсов веб-драйвера здесь
-            _driver.Quit();
+                _driver.Quit(); // Закрытие браузера после завершения каждого теста            
         }
     }
 }

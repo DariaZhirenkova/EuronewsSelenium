@@ -1,11 +1,5 @@
 ﻿using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
 using SeleniumExtras.WaitHelpers;
 
 namespace EuronewsSelenium
@@ -14,6 +8,7 @@ namespace EuronewsSelenium
     {
 
         IWebDriver _webDriver;
+        ILogger _logger;
         WebDriverWait _wait;
         const string NAV_ELEMENTS_XPATH = "//div[contains(@class, 'list-item u-show-for-xlarge')]";
 
@@ -23,6 +18,7 @@ namespace EuronewsSelenium
             _webDriver.Url = url;
             _webDriver.Manage().Window.Maximize();
             _wait = new WebDriverWait(_wdriver, TimeSpan.FromSeconds(5));
+            _logger = LoggerManager.GetLoggerInstance();
         }
 
         public EuronewsBasePage(IWebDriver _wdriver)
@@ -35,7 +31,7 @@ namespace EuronewsSelenium
 
         public IReadOnlyCollection<IWebElement> GetElementsByXPath(string xpath)
         {
-
+            //_logger.LogMessage($"{xpath} GetElementsByXPath was found");
             return _wait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(By.XPath(xpath)))
                 .Where(x => x.Enabled && x.Displayed).ToList();
         }
@@ -57,7 +53,14 @@ namespace EuronewsSelenium
         public void ClickMenuPoint(Keywords keyItem)
         {
             var element = GetElementsByXPath(NAV_ELEMENTS_XPATH).Where(x => x.Text == keyItem._xPath).First();
-            element.Click();
+            if (element == null)
+            {
+                _logger.LogError($"{keyItem._xPath} was not found");
+            }
+            else {
+                _logger.LogMessage($"{keyItem._xPath} was found");
+                element.Click();
+            }
         }
 
          public void FindInputEnter(string xPath, string infoToSearch)
