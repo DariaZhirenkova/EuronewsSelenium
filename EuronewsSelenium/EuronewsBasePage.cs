@@ -10,7 +10,7 @@ namespace EuronewsSelenium
         IWebDriver _webDriver;
         ILogger _logger;
         WebDriverWait _wait;
-        const string NAV_ELEMENTS_XPATH = "//div[contains(@class, 'list-item u-show-for-xlarge')]";
+        const string NAV_ELEMENTS_XPATH = "//a[@class='c-navigation-bar__link']"; //"//div[contains(@class, 'list-item u-show-for-xlarge')]";
 
         public EuronewsBasePage(IWebDriver _wdriver,string url)
         {

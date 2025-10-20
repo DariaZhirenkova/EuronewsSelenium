@@ -13,15 +13,15 @@ namespace EuronewsSelenium
             WebDriverWait agreeWait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
 
             HomePage homePage = new HomePage(driver);
-            var key = new List<Keywords> { new Keywords("My Europe", "европ", "europe"),
-                                           new Keywords("Мир", "международ", "intern"),
-                                           new Keywords("Бизнес", "эконом", "business"),
-                                           new Keywords("Спорт", "спорт", "sport"),
-                                           new Keywords("Green", "путешествия", "green"),
+            var key = new List<Keywords> { new Keywords("Европа", "европ", "europe"),
+                                           new Keywords("Мир", "мир", "news"),
+                                           new Keywords("Business", "эконом", "business"),
+                                           /*new Keywords("Спорт", "спорт", "sport"),"),*/
+                                           new Keywords("Green", "green", "green"),
                                            new Keywords("Next", "next", "next"),
                                            new Keywords("Путешествия", "путешествия", "travel"),
-                                           new Keywords("Культура", "culture", "culture"),
-                                           new Keywords("Видео", "видео", "video")
+                                           new Keywords("Культура", "culture", "culture")
+                                          // new Keywords("Видео", "видео", "video")
             };
             List<string> res = new List<string>();
 

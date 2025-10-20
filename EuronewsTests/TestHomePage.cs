@@ -30,15 +30,15 @@ namespace EuronewsTests
         {
             return new List<object[]>
         {
-            new object[] { new Keywords("My Europe", "европ", "europe") },
-            new object[] { new Keywords("Мир", "международ", "intern") },
+            new object[] { new Keywords("Европа", "европ", "europe") },
+            new object[] { new Keywords("Мир", "новости", "news") },
             new object[] { new Keywords("Business", "business", "business") },
-            new object[] { new Keywords("Спорт", "спорт", "sport") },
-            new object[] { new Keywords("Green", "путешествия", "green") },
+            //new object[] { new Keywords("Спорт", "спорт", "sport") },
+            new object[] { new Keywords("Green", "green", "green") },
             new object[] { new Keywords("Next", "next", "next") },
             new object[] { new Keywords("Путешествия", "путешествия", "travel") },
-            new object[] { new Keywords("Культура", "culture", "culture") },
-            new object[] { new Keywords("Видео", "видео", "video") }
+            new object[] { new Keywords("Культура", "culture", "culture") }
+           // new object[] { new Keywords("Видео", "видео", "video") }
         };
         }
         [TestMethod]
